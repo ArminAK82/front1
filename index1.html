@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse | Modern Book Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8a2be2; /* Vibrant Purple */
+            --primary-light: #9d4edd;
+            --primary-dark: #6a0dad;
+            --secondary: #4b0082; /* Indigo */
+            --accent: #ff69b4; /* Hot Pink */
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #8a2be2 0%, #4b0082 50%, #9d4edd 100%);
+            --gradient-2: linear-gradient(45deg, #6a0dad 0%, #8a2be2 50%, #ff69b4 100%);
+            --gradient-3: linear-gradient(120deg, #8a2be2 0%, #4b0082 50%, #9d4edd 100%);
+            --border-radius: 16px;
+            --box-shadow: 0 20px 40px rgba(138, 43, 226, 0.3);
+            --box-shadow-hover: 0 30px 60px rgba(138, 43, 226, 0.4);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --blur: blur(20px);
+            --text-shadow: 0 2px 10px rgba(138, 43, 226, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.1) 0%, transparent 30%);
+        }
+
+        /* 3D Background Objects */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .floating-object {
+            position: absolute;
+            opacity: 0.2;
+            filter: var(--blur);
+            pointer-events: none;
+            transform-style: preserve-3d;
+        }
+
+        .book-3d {
+            width: 120px;
+            height: 160px;
+            background: var(--gradient-3);
+            border-radius: 8px;
+            transform: rotateX(60deg) rotateZ(45deg);
+            animation: floatBook 25s infinite ease-in-out;
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+            position: relative;
+        }
+
+        .book-3d::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .book-3d::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            transform: translateZ(5px);
+        }
+
+        .sphere {
+            width: 180px;
+            height: 180px;
+            background: var(--gradient);
+            border-radius: 50%;
+            transform: rotateX(45deg) rotateY(30deg);
+            animation: floatSphere 30s infinite linear;
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
+        }
+
+        .pyramid {
+            width: 0;
+            height: 0;
+            border-left: 80px solid transparent;
+            border-right: 80px solid transparent;
+            border-bottom: 140px solid var(--primary-light);
+            transform: rotateX(70deg) rotateZ(30deg);
+            animation: floatPyramid 35s infinite ease-in-out;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .pyramid::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            left: -80px;
+            width: 160px;
+            height: 160px;
+            background: rgba(138, 43, 226, 0.3);
+            border-radius: 50%;
+            transform: translateZ(-100px);
+        }
+
+        .ring {
+            width: 200px;
+            height: 200px;
+            border: 8px solid transparent;
+            border-radius: 50%;
+            border-top: 8px solid var(--primary);
+            border-right: 8px solid var(--primary-light);
+            border-bottom: 8px solid var(--secondary);
+            transform: rotateX(60deg) rotateY(45deg);
+            animation: floatRing 40s infinite linear;
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .grid-3d {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300%;
+            height: 300%;
+            background: 
+                linear-gradient(rgba(138, 43, 226, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: rotateX(60deg) translateZ(-150px);
+            animation: gridMove 20s infinite linear;
+            opacity: 0.15;
+        }
+
+        /* Animations */
+        @keyframes floatBook {
+            0% { transform: rotateX(60deg) rotateZ(45deg) translate(0, 0) rotateY(0deg) scale(1); }
+            25% { transform: rotateX(65deg) rotateZ(50deg) translate(80px, 60px) rotateY(90deg) scale(1.1); }
+            50% { transform: rotateX(55deg) rotateZ(40deg) translate(60px, 120px) rotateY(180deg) scale(0.9); }
+            75% { transform: rotateX(70deg) rotateZ(55deg) translate(-40px, 80px) rotateY(270deg) scale(1.05); }
+            100% { transform: rotateX(60deg) rotateZ(45deg) translate(0, 0) rotateY(360deg) scale(1); }
+        }
+
+        @keyframes floatSphere {
+            0% { transform: rotateX(45deg) rotateY(30deg) translate(0, 0) scale(1); }
+            33% { transform: rotateX(50deg) rotateY(35deg) translate(100px, -60px) scale(1.2); }
+            66% { transform: rotateX(40deg) rotateY(25deg) translate(-80px, 100px) scale(0.8); }
+            100% { transform: rotateX(45deg) rotateY(30deg) translate(0, 0) scale(1); }
+        }
+
+        @keyframes floatPyramid {
+            0% { transform: rotateX(70deg) rotateZ(30deg) translate(0, 0) rotateX(0deg); }
+            50% { transform: rotateX(75deg) rotateZ(35deg) translate(70px, -40px) rotateX(180deg); }
+            100% { transform: rotateX(70deg) rotateZ(30deg) translate(0, 0) rotateX(360deg); }
+        }
+
+        @keyframes floatRing {
+            0% { transform: rotateX(60deg) rotateY(45deg) translate(0, 0) rotate(0deg); }
+            25% { transform: rotateX(65deg) rotateY(50deg) translate(90px, 70px) rotate(90deg); }
+            50% { transform: rotateX(55deg) rotateY(40deg) translate(70px, 140px) rotate(180deg); }
+            75% { transform: rotateX(70deg) rotateY(55deg) translate(-50px, 90px) rotate(270deg); }
+            100% { transform: rotateX(60deg) rotateY(45deg) translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes gridMove {
+            0% { transform: rotateX(60deg) translateZ(-150px) translateY(0); }
+            100% { transform: rotateX(60deg) translateZ(-150px) translateY(60px); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.8rem 0;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .icon-button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .icon-button:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.7rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--light);
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 180px 0 120px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            z-index: 2;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            font-family: 'Playfair Display', serif;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--text-shadow);
+        }
+
+        .hero h1 span {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+            opacity: 0.6;
+            border-radius: 3px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .highlight {
+            color: var(--primary-light);
+            font-weight: 600;
+            position: relative;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(138, 43, 226, 0.2);
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.8rem;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--box-shadow);
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-light);
+            border: 2px solid var(--primary-light);
+            font-weight: 600;
+        }
+
+        .btn-secondary::before {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            font-family: 'Playfair Display', serif;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            text-shadow: var(--text-shadow);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .category-card {
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: var(--border-radius);
+            padding: 2.8rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(138, 43, 226, 0.15), rgba(157, 78, 221, 0.15));
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px) rotate(2deg);
+            border-color: var(--primary);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .category-icon {
+            font-size: 4rem;
+            margin-bottom: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--text-shadow);
+        }
+
+        .category-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--light);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .category-count {
+            color: var(--primary-light);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Featured Books */
+        .featured {
+            padding: 120px 0;
+            background: rgba(138, 43, 226, 0.08);
+            position: relative;
+        }
+
+        .books-slider {
+            display: flex;
+            gap: 2.5rem;
+            padding: 2rem 0;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .books-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .book-card {
+            min-width: 280px;
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .book-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            border-color: var(--primary);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .book-cover {
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .book-card:hover .book-cover img {
+            transform: scale(1.1);
+        }
+
+        .book-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .book-info {
+            padding: 1.8rem;
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+            font-family: 'Playfair Display', serif;
+            line-height: 1.4;
+        }
+
+        .book-author {
+            color: var(--primary-light);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .book-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.2rem;
+        }
+
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .stars {
+            color: #ffd700;
+        }
+
+        .rating-count {
+            color: var(--primary-light);
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .add-to-cart:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Best Sellers */
+        .best-sellers {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .sellers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .seller-card {
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .seller-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--primary);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .seller-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .seller-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .seller-card:hover .seller-image img {
+            transform: scale(1.1);
+        }
+
+        .seller-info {
+            padding: 1.8rem;
+        }
+
+        .seller-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .seller-author {
+            color: var(--primary-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .seller-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.2rem;
+        }
+
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--light);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+
+        .btn-outline {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: var(--primary-light);
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            padding: 120px 0;
+            background: rgba(138, 43, 226, 0.1);
+            position: relative;
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .newsletter h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .newsletter p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 50px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .newsletter-btn {
+            padding: 0 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .newsletter-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 0 40px;
+            background: rgba(18, 18, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(138, 43, 226, 0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+            display: block;
+            padding: 5px 0;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+            transform: translateX(5px);
+            opacity: 1;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            font-size: 1.2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--box-shadow);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .copyright a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .copyright a:hover {
+            color: var(--white);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 1s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 4.5rem;
+            }
+            
+            .container {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                gap: 1.5rem;
+            }
+            
+            .btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --border-radius: 12px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            
+            nav {
+                order: 3;
+                width: 100%;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 1.5rem;
+                display: none;
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                order: 1;
+            }
+            
+            .header-icons {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 150px 0 100px;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .cta-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .categories-grid,
+            .sellers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-btn {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                width: 95%;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .footer-content {
+                gap: 2.5rem;
+            }
+            
+            .category-card,
+            .seller-card {
+                padding: 2rem;
+            }
+        }
+
+        /* 3D Effect Enhancement */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-3d:hover {
+            transform: rotateX(10deg) rotateY(10deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background Objects -->
+    <div class="background">
+        <div class="floating-object book-3d" style="top: 15%; left: 10%;"></div>
+        <div class="floating-object sphere" style="top: 60%; right: 15%;"></div>
+        <div class="floating-object pyramid" style="bottom: 20%; left: 20%;"></div>
+        <div class="floating-object ring" style="top: 40%; right: 70%;"></div>
+        <div class="grid-3d"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">BookVerse</div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#featured">Featured</a></li>
+                        <li><a href="#best-sellers">Best Sellers</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </nav>
+                <div class="header-icons">
+                    <div class="icon-button">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="icon-button">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="icon-button position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge">3</span>
+                    </div>
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>Discover Your <span>Next</span> Great Read</h1>
+                <p>Immerse yourself in a world of knowledge, imagination, and inspiration. BookVerse offers a curated collection of the finest literature, from timeless classics to contemporary bestsellers.</p>
+                <div class="cta-buttons">
+                    <a href="#featured" class="btn btn-primary">Explore Books</a>
+                    <a href="#categories" class="btn btn-secondary">Browse Categories</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories">
+        <div class="container">
+            <h2 class="section-title">Book Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="category-name">Fiction</h3>
+                    <p class="category-count">1,250+ Books</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="category-name">Non-Fiction</h3>
+                    <p class="category-count">980+ Books</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="category-name">Best Sellers</h3>
+                    <p class="category-count">250+ Books</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3 class="category-name">Science</h3>
+                    <p class="category-count">630+ Books</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="category-name">Romance</h3>
+                    <p class="category-count">420+ Books</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3 class="category-name">Fantasy</h3>
+                    <p class="category-count">380+ Books</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Books -->
+    <section id="featured" class="featured">
+        <div class="container">
+            <h2 class="section-title">Featured Books</h2>
+            <div class="books-slider">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/8a2be2/ffffff?text=The+Midnight+Library" alt="The Midnight Library">
+                        <div class="book-badge">Best Seller</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">The Midnight Library</h3>
+                        <p class="book-author">by Matt Haig</p>
+                        <div class="book-price">$14.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★★</div>
+                            <span class="rating-count">(4.8/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/6a0dad/ffffff?text=Dune" alt="Dune">
+                        <div class="book-badge">Classic</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Dune</h3>
+                        <p class="book-author">by Frank Herbert</p>
+                        <div class="book-price">$18.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★★</div>
+                            <span class="rating-count">(4.9/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/9d4edd/ffffff?text=The+Seven+Husbands" alt="The Seven Husbands">
+                        <div class="book-badge">New Release</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">The Seven Husbands of Evelyn Hugo</h3>
+                        <p class="book-author">by Taylor Jenkins Reid</p>
+                        <div class="book-price">$16.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★☆</div>
+                            <span class="rating-count">(4.7/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/4b0082/ffffff?text=Atomic+Habits" alt="Atomic Habits">
+                        <div class="book-badge">Self-Help</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Atomic Habits</h3>
+                        <p class="book-author">by James Clear</p>
+                        <div class="book-price">$15.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★★</div>
+                            <span class="rating-count">(4.9/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/ff69b4/ffffff?text=Project+Hail+Mary" alt="Project Hail Mary">
+                        <div class="book-badge">Sci-Fi</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Project Hail Mary</h3>
+                        <p class="book-author">by Andy Weir</p>
+                        <div class="book-price">$17.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★★</div>
+                            <span class="rating-count">(4.8/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://placehold.co/300x450/8a2be2/ffffff?text=The+Book+Thief" alt="The Book Thief">
+                        <div class="book-badge">Award Winner</div>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">The Book Thief</h3>
+                        <p class="book-author">by Markus Zusak</p>
+                        <div class="book-price">$13.99</div>
+                        <div class="book-rating">
+                            <div class="stars">★★★★★</div>
+                            <span class="rating-count">(4.9/5)</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section id="best-sellers" class="best-sellers">
+        <div class="container">
+            <h2 class="section-title">Best Selling This Week</h2>
+            <div class="sellers-grid">
+                <div class="seller-card">
+                    <div class="seller-image">
+                        <img src="https://placehold.co/400x300/8a2be2/ffffff?text=The+Four+Winds" alt="The Four Winds">
+                    </div>
+                    <div class="seller-info">
+                        <h3 class="seller-title">The Four Winds</h3>
+                        <p class="seller-author">by Kristin Hannah</p>
+                        <div class="seller-price">$19.99</div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Books Sold</span>
+                                <span>8,452</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <button class="btn-outline">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="seller-card">
+                    <div class="seller-image">
+                        <img src="https://placehold.co/400x300/6a0dad/ffffff?text=Where+the+Crawdads+Sing" alt="Where the Crawdads Sing">
+                    </div>
+                    <div class="seller-info">
+                        <h3 class="seller-title">Where the Crawdads Sing</h3>
+                        <p class="seller-author">by Delia Owens</p>
+                        <div class="seller-price">$14.99</div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Books Sold</span>
+                                <span>12,347</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 98%"></div>
+                            </div>
+                        </div>
+                        <button class="btn-outline">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="seller-card">
+                    <div class="seller-image">
+                        <img src="https://placehold.co/400x300/9d4edd/ffffff?text=The+Invisible+Life" alt="The Invisible Life">
+                    </div>
+                    <div class="seller-info">
+                        <h3 class="seller-title">The Invisible Life of Addie LaRue</h3>
+                        <p class="seller-author">by V.E. Schwab</p>
+                        <div class="seller-price">$16.99</div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Books Sold</span>
+                                <span>6,789</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <button class="btn-outline">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Join Our Literary Community</h2>
+                <p>Subscribe to our newsletter and be the first to know about new releases, exclusive offers, and literary events. Get 15% off your first order when you join!</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>BookVerse</h3>
+                    <p style="opacity: 0.8; line-height: 1.7; margin-bottom: 1.5rem;">Your gateway to the world of literature. Discover, read, and fall in love with books all over again.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">All Books</a></li>
+                        <li><a href="#">Best Sellers</a></li>
+                        <li><a href="#">New Releases</a></li>
+                        <li><a href="#">Coming Soon</a></li>
+                        <li><a href="#">Special Editions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Fiction</a></li>
+                        <li><a href="#">Non-Fiction</a></li>
+                        <li><a href="#">Science & Technology</a></li>
+                        <li><a href="#">Biographies</a></li>
+                        <li><a href="#">Children's Books</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 BookVerse. All rights reserved. Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> for book lovers.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navList = document.querySelector('nav ul');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    navList.classList.toggle('active');
+                    this.classList.toggle('active');
+                });
+            }
+            
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu
+                        if (navList.classList.contains('active')) {
+                            navList.classList.remove('active');
+                            menuToggle.classList.remove('active');
+                        }
+                    }
+                });
+            });
+            
+            // Animation on scroll
+            const fadeElements = document.querySelectorAll('.fade-in, .slide-up');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+            
+            // Best sellers progress bars animation
+            const progressBars = document.querySelectorAll('.progress-fill');
+            const bestSellersSection = document.querySelector('.best-sellers');
+            
+            const progressObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        progressBars.forEach(bar => {
+                            const width = bar.style.width;
+                            bar.style.width = '0';
+                            setTimeout(() => {
+                                bar.style.width = width;
+                            }, 100);
+                        });
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+            
+            if (bestSellersSection) {
+                progressObserver.observe(bestSellersSection);
+            }
+            
+            // Add to cart animation
+            const addToCartButtons = document.querySelectorAll('.add-to-cart, .btn-outline');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Create floating cart animation
+                    const cartIcon = document.querySelector('.fa-shopping-cart').parentElement;
+                    const buttonRect = button.getBoundingClientRect();
+                    const cartRect = cartIcon.getBoundingClientRect();
+                    
+                    const flyElement = document.createElement('div');
+                    flyElement.innerHTML = '<i class="fas fa-book"></i>';
+                    flyElement.style.position = 'fixed';
+                    flyElement.style.left = buttonRect.left + 'px';
+                    flyElement.style.top = buttonRect.top + 'px';
+                    flyElement.style.zIndex = '1000';
+                    flyElement.style.fontSize = '24px';
+                    flyElement.style.color = '#9d4edd';
+                    flyElement.style.pointerEvents = 'none';
+                    document.body.appendChild(flyElement);
+                    
+                    // Animate to cart
+                    const animation = flyElement.animate([
+                        { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                        { 
+                            transform: `translate(${cartRect.left - buttonRect.left}px, ${cartRect.top - buttonRect.top}px) rotate(360deg)`, 
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 800,
+                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+                    });
+                    
+                    animation.onfinish = () => {
+                        flyElement.remove();
+                        // Update cart badge
+                        const badge = document.querySelector('.cart-badge');
+                        badge.textContent = parseInt(badge.textContent) + 1;
+                    };
+                });
+            });
+        });
+    </script>
+</body>
+</html>
