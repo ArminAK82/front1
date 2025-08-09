@@ -288,6 +288,7 @@
             cursor: pointer;
             transition: var(--transition);
             border: 1px solid rgba(138, 43, 226, 0.3);
+            position: relative;
         }
 
         .icon-button:hover {
@@ -334,6 +335,283 @@
             color: var(--white);
             transform: translateY(-3px);
             box-shadow: var(--box-shadow);
+        }
+
+        /* Shopping Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(138, 43, 226, 0.3);
+            z-index: 2000;
+            transition: right 0.5s ease;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .cart-modal.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .cart-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-cart {
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: rotate(90deg);
+        }
+
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 100px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--light);
+        }
+
+        .cart-item-author {
+            font-size: 0.9rem;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 6px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-item {
+            color: #ff69b4;
+            background: rgba(255, 105, 180, 0.1);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-item:hover {
+            background: #ff69b4;
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .cart-total {
+            padding: 1.5rem;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            color: var(--light);
+        }
+
+        .total-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        .grand-total {
+            font-size: 1.4rem;
+            color: var(--white);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .cart-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            transform: scale(1.2);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--box-shadow);
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-light);
+            border: 2px solid var(--primary-light);
+            font-weight: 600;
+        }
+
+        .btn-secondary::before {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 0;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
         }
 
         /* Hero Section */
@@ -410,62 +688,6 @@
         .cta-buttons {
             display: flex;
             gap: 1.8rem;
-        }
-
-        .btn {
-            padding: 16px 36px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            border: none;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient);
-            z-index: -1;
-            transition: var(--transition);
-        }
-
-        .btn:hover::before {
-            transform: scale(1.2);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--box-shadow);
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary-light);
-            border: 2px solid var(--primary-light);
-            font-weight: 600;
-        }
-
-        .btn-secondary::before {
-            background: rgba(138, 43, 226, 0.1);
-        }
-
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--box-shadow-hover);
         }
 
         /* Categories Section */
@@ -1100,6 +1322,15 @@
             .newsletter-btn {
                 padding: 16px;
             }
+            
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .cart-modal.open {
+                right: 0;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1136,16 +1367,10 @@
             .seller-card {
                 padding: 2rem;
             }
-        }
-
-        /* 3D Effect Enhancement */
-        .card-3d {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .card-3d:hover {
-            transform: rotateX(10deg) rotateY(10deg);
+            
+            .cart-modal {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1180,9 +1405,9 @@
                     <div class="icon-button">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="icon-button position-relative">
+                    <div class="icon-button cart-toggle">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-badge">3</span>
+                        <span class="cart-badge">0</span>
                     </div>
                 </div>
                 <div class="menu-toggle">
@@ -1191,6 +1416,43 @@
             </div>
         </div>
     </header>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal">
+        <div class="cart-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="close-cart">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-total">
+            <div class="total-row">
+                <span class="total-label">Subtotal</span>
+                <span class="total-value" id="subtotal">$0.00</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Shipping</span>
+                <span class="total-value">Free</span>
+            </div>
+            <div class="total-row grand-total">
+                <span class="total-label">Total</span>
+                <span class="total-value" id="total">$0.00</span>
+            </div>
+        </div>
+        <div class="cart-actions">
+            <button class="btn btn-secondary" id="continue-shopping">Continue Shopping</button>
+            <button class="btn btn-primary" id="checkout">Checkout</button>
+        </div>
+        <div class="cart-empty">
+            Your cart is empty
+        </div>
+    </div>
+
+    <!-- Overlay for cart -->
+    <div class="overlay"></div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -1262,7 +1524,7 @@
         <div class="container">
             <h2 class="section-title">Featured Books</h2>
             <div class="books-slider">
-                <div class="book-card">
+                <div class="book-card" data-id="1" data-title="The Midnight Library" data-author="by Matt Haig" data-price="14.99" data-image="https://placehold.co/300x450/8a2be2/ffffff?text=The+Midnight+Library">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/8a2be2/ffffff?text=The+Midnight+Library" alt="The Midnight Library">
                         <div class="book-badge">Best Seller</div>
@@ -1278,7 +1540,7 @@
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="book-card">
+                <div class="book-card" data-id="2" data-title="Dune" data-author="by Frank Herbert" data-price="18.99" data-image="https://placehold.co/300x450/6a0dad/ffffff?text=Dune">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/6a0dad/ffffff?text=Dune" alt="Dune">
                         <div class="book-badge">Classic</div>
@@ -1294,7 +1556,7 @@
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="book-card">
+                <div class="book-card" data-id="3" data-title="The Seven Husbands" data-author="by Taylor Jenkins Reid" data-price="16.99" data-image="https://placehold.co/300x450/9d4edd/ffffff?text=The+Seven+Husbands">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/9d4edd/ffffff?text=The+Seven+Husbands" alt="The Seven Husbands">
                         <div class="book-badge">New Release</div>
@@ -1310,7 +1572,7 @@
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="book-card">
+                <div class="book-card" data-id="4" data-title="Atomic Habits" data-author="by James Clear" data-price="15.99" data-image="https://placehold.co/300x450/4b0082/ffffff?text=Atomic+Habits">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/4b0082/ffffff?text=Atomic+Habits" alt="Atomic Habits">
                         <div class="book-badge">Self-Help</div>
@@ -1326,7 +1588,7 @@
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="book-card">
+                <div class="book-card" data-id="5" data-title="Project Hail Mary" data-author="by Andy Weir" data-price="17.99" data-image="https://placehold.co/300x450/ff69b4/ffffff?text=Project+Hail+Mary">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/ff69b4/ffffff?text=Project+Hail+Mary" alt="Project Hail Mary">
                         <div class="book-badge">Sci-Fi</div>
@@ -1342,7 +1604,7 @@
                         <button class="add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="book-card">
+                <div class="book-card" data-id="6" data-title="The Book Thief" data-author="by Markus Zusak" data-price="13.99" data-image="https://placehold.co/300x450/8a2be2/ffffff?text=The+Book+Thief">
                     <div class="book-cover">
                         <img src="https://placehold.co/300x450/8a2be2/ffffff?text=The+Book+Thief" alt="The Book Thief">
                         <div class="book-badge">Award Winner</div>
@@ -1367,7 +1629,7 @@
         <div class="container">
             <h2 class="section-title">Best Selling This Week</h2>
             <div class="sellers-grid">
-                <div class="seller-card">
+                <div class="seller-card" data-id="7" data-title="The Four Winds" data-author="by Kristin Hannah" data-price="19.99" data-image="https://placehold.co/400x300/8a2be2/ffffff?text=The+Four+Winds">
                     <div class="seller-image">
                         <img src="https://placehold.co/400x300/8a2be2/ffffff?text=The+Four+Winds" alt="The Four Winds">
                     </div>
@@ -1384,10 +1646,10 @@
                                 <div class="progress-fill" style="width: 95%"></div>
                             </div>
                         </div>
-                        <button class="btn-outline">Add to Cart</button>
+                        <button class="btn-outline add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="seller-card">
+                <div class="seller-card" data-id="8" data-title="Where the Crawdads Sing" data-author="by Delia Owens" data-price="14.99" data-image="https://placehold.co/400x300/6a0dad/ffffff?text=Where+the+Crawdads+Sing">
                     <div class="seller-image">
                         <img src="https://placehold.co/400x300/6a0dad/ffffff?text=Where+the+Crawdads+Sing" alt="Where the Crawdads Sing">
                     </div>
@@ -1404,10 +1666,10 @@
                                 <div class="progress-fill" style="width: 98%"></div>
                             </div>
                         </div>
-                        <button class="btn-outline">Add to Cart</button>
+                        <button class="btn-outline add-to-cart">Add to Cart</button>
                     </div>
                 </div>
-                <div class="seller-card">
+                <div class="seller-card" data-id="9" data-title="The Invisible Life" data-author="by V.E. Schwab" data-price="16.99" data-image="https://placehold.co/400x300/9d4edd/ffffff?text=The+Invisible+Life">
                     <div class="seller-image">
                         <img src="https://placehold.co/400x300/9d4edd/ffffff?text=The+Invisible+Life" alt="The Invisible Life">
                     </div>
@@ -1424,7 +1686,7 @@
                                 <div class="progress-fill" style="width: 88%"></div>
                             </div>
                         </div>
-                        <button class="btn-outline">Add to Cart</button>
+                        <button class="btn-outline add-to-cart">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -1497,8 +1759,215 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
+        // Shopping Cart Functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Cart elements
+            const cartToggle = document.querySelector('.cart-toggle');
+            const cartModal = document.querySelector('.cart-modal');
+            const closeCart = document.querySelector('.close-cart');
+            const overlay = document.querySelector('.overlay');
+            const cartItems = document.querySelector('.cart-items');
+            const cartEmpty = document.querySelector('.cart-empty');
+            const subtotalElement = document.getElementById('subtotal');
+            const totalElement = document.getElementById('total');
+            const continueShopping = document.getElementById('continue-shopping');
+            const checkoutButton = document.getElementById('checkout');
+
+            // Cart state
+            let cart = [];
+            let cartCount = 0;
+
+            // Open cart
+            cartToggle.addEventListener('click', function() {
+                updateCartModal();
+                cartModal.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close cart
+            function closeCartModal() {
+                cartModal.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            closeCart.addEventListener('click', closeCartModal);
+            overlay.addEventListener('click', closeCartModal);
+
+            // Add to cart functionality
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const bookCard = this.closest('.book-card');
+                    const id = bookCard.dataset.id;
+                    const title = bookCard.dataset.title;
+                    const author = bookCard.dataset.author;
+                    const price = parseFloat(bookCard.dataset.price);
+                    const image = bookCard.dataset.image;
+
+                    // Check if item already in cart
+                    const existingItem = cart.find(item => item.id === id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            id,
+                            title,
+                            author,
+                            price,
+                            image,
+                            quantity: 1
+                        });
+                    }
+
+                    // Update cart count
+                    updateCartCount();
+                    
+                    // Show animation
+                    showAddToCartAnimation();
+                    
+                    // Update cart modal if open
+                    if (cartModal.classList.contains('open')) {
+                        updateCartModal();
+                    }
+                });
+            });
+
+            // Update cart count
+            function updateCartCount() {
+                cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+                document.querySelector('.cart-badge').textContent = cartCount;
+            }
+
+            // Show add to cart animation
+            function showAddToCartAnimation() {
+                const cartIcon = document.querySelector('.cart-toggle');
+                const rect = cartIcon.getBoundingClientRect();
+                
+                const flyElement = document.createElement('div');
+                flyElement.innerHTML = '<i class="fas fa-book"></i>';
+                flyElement.style.position = 'fixed';
+                flyElement.style.left = rect.left + 'px';
+                flyElement.style.top = rect.top + 'px';
+                flyElement.style.zIndex = '1000';
+                flyElement.style.fontSize = '24px';
+                flyElement.style.color = '#9d4edd';
+                flyElement.style.pointerEvents = 'none';
+                document.body.appendChild(flyElement);
+                
+                const animation = flyElement.animate([
+                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                    { 
+                        transform: `translate(${window.innerWidth - rect.left - 50}px, ${-rect.top}px) rotate(360deg)`, 
+                        opacity: 0 
+                    }
+                ], {
+                    duration: 800,
+                    easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    flyElement.remove();
+                };
+            }
+
+            // Update cart modal
+            function updateCartModal() {
+                // Clear current items
+                cartItems.innerHTML = '';
+                
+                // Show/hide empty state
+                if (cart.length === 0) {
+                    cartEmpty.style.display = 'block';
+                    document.querySelector('.cart-total').style.display = 'none';
+                    document.querySelector('.cart-actions').style.display = 'none';
+                } else {
+                    cartEmpty.style.display = 'none';
+                    document.querySelector('.cart-total').style.display = 'block';
+                    document.querySelector('.cart-actions').style.display = 'flex';
+                    
+                    // Add cart items
+                    cart.forEach(item => {
+                        const cartItem = document.createElement('div');
+                        cartItem.className = 'cart-item';
+                        cartItem.innerHTML = `
+                            <div class="cart-item-image">
+                                <img src="${item.image}" alt="${item.title}">
+                            </div>
+                            <div class="cart-item-details">
+                                <h3 class="cart-item-title">${item.title}</h3>
+                                <p class="cart-item-author">${item.author}</p>
+                                <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                                <div class="cart-item-controls">
+                                    <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                                    <span class="quantity">${item.quantity}</span>
+                                    <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                                    <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        `;
+                        cartItems.appendChild(cartItem);
+                    });
+
+                    // Add event listeners to cart controls
+                    document.querySelectorAll('.decrease').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            const item = cart.find(item => item.id === id);
+                            if (item.quantity > 1) {
+                                item.quantity -= 1;
+                            } else {
+                                cart = cart.filter(item => item.id !== id);
+                            }
+                            updateCartCount();
+                            updateCartModal();
+                        });
+                    });
+
+                    document.querySelectorAll('.increase').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            const item = cart.find(item => item.id === id);
+                            item.quantity += 1;
+                            updateCartCount();
+                            updateCartModal();
+                        });
+                    });
+
+                    document.querySelectorAll('.remove-item').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            cart = cart.filter(item => item.id !== id);
+                            updateCartCount();
+                            updateCartModal();
+                        });
+                    });
+                }
+
+                // Update totals
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+                totalElement.textContent = `$${subtotal.toFixed(2)}`;
+            }
+
+            // Continue shopping button
+            continueShopping.addEventListener('click', closeCartModal);
+
+            // Checkout button
+            checkoutButton.addEventListener('click', function() {
+                if (cart.length > 0) {
+                    alert('Thank you for your order! This is a demo, so no actual purchase was made.');
+                    cart = [];
+                    updateCartCount();
+                    updateCartModal();
+                    closeCartModal();
+                }
+            });
+
+            // Mobile menu toggle
             const menuToggle = document.querySelector('.menu-toggle');
             const navList = document.querySelector('nav ul');
             
@@ -1574,47 +2043,10 @@
             if (bestSellersSection) {
                 progressObserver.observe(bestSellersSection);
             }
-            
-            // Add to cart animation
-            const addToCartButtons = document.querySelectorAll('.add-to-cart, .btn-outline');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    // Create floating cart animation
-                    const cartIcon = document.querySelector('.fa-shopping-cart').parentElement;
-                    const buttonRect = button.getBoundingClientRect();
-                    const cartRect = cartIcon.getBoundingClientRect();
-                    
-                    const flyElement = document.createElement('div');
-                    flyElement.innerHTML = '<i class="fas fa-book"></i>';
-                    flyElement.style.position = 'fixed';
-                    flyElement.style.left = buttonRect.left + 'px';
-                    flyElement.style.top = buttonRect.top + 'px';
-                    flyElement.style.zIndex = '1000';
-                    flyElement.style.fontSize = '24px';
-                    flyElement.style.color = '#9d4edd';
-                    flyElement.style.pointerEvents = 'none';
-                    document.body.appendChild(flyElement);
-                    
-                    // Animate to cart
-                    const animation = flyElement.animate([
-                        { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
-                        { 
-                            transform: `translate(${cartRect.left - buttonRect.left}px, ${cartRect.top - buttonRect.top}px) rotate(360deg)`, 
-                            opacity: 0 
-                        }
-                    ], {
-                        duration: 800,
-                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
-                    });
-                    
-                    animation.onfinish = () => {
-                        flyElement.remove();
-                        // Update cart badge
-                        const badge = document.querySelector('.cart-badge');
-                        badge.textContent = parseInt(badge.textContent) + 1;
-                    };
-                });
-            });
+
+            // Initialize cart
+            updateCartCount();
+            updateCartModal();
         });
     </script>
 </body>
